@@ -30,16 +30,26 @@
         </Button>
 
         <!-- Content -->
-        <ListView Grid.Column="1" ItemsSource="{Binding AvailableOperations}" HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="ListView_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="20"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Selecione a operação desejada:" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ListView Grid.Row="1" ItemsSource="{Binding AvailableOperations, Mode=OneWay}" 
+                      SelectedIndex="{Binding OperationIndex, Mode=TwoWay}" 
+                      HorizontalAlignment="Center" VerticalAlignment="Top">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="40"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
 
         <!-- Forward Button -->
-        <Button Grid.Column="2" VerticalAlignment="Center" Click="Button_Click" Height="25" Width="25" IsEnabled="{Binding IsForwardButtonEnabled, Mode=OneWay}">
+        <Button Grid.Column="2" VerticalAlignment="Center" Click="Button_Click" Height="25" Width="25"
+                IsEnabled="{Binding IsForwardButtonEnabled, Mode=OneWay}">
             <Image Source="/IHC_Final;component/Assets/arrow.png" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <RotateTransform Angle="180"/>

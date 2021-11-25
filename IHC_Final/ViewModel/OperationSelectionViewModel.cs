@@ -13,17 +13,25 @@ namespace IHC_Final.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public bool IsForwardButtonEnabled { get; private set; }
+        public bool IsForwardButtonEnabled { get => _operationIndex != -1; }
         public bool IsBackButtonEnabled { get => false; }
         public static ObservableCollection<string> AvailableOperations { get; } = new ObservableCollection<string>()
         {
             "Marcar aulas",
             "Consultar aulas marcadas"
         };
-
-        public void OptionSelected(int selectedIndex)
+        private int _operationIndex = -1;
+        public int OperationIndex
         {
-            IsForwardButtonEnabled = selectedIndex != -1;
+            get
+            {
+                return _operationIndex;
+            }
+            set
+            {
+                _operationIndex = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsForwardButtonEnabled)));
+            }
         }
     }
 }

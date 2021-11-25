@@ -1,4 +1,5 @@
 ﻿using IHC_Final.View;
+using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
@@ -29,10 +30,20 @@ namespace IHC_Final.Common
                 }
                 else
                 {
-                    switch (_navigationStack.Peek())
+                    switch (CurrentPage)
                     {
                         case OperationSelectionPage:
-                            _navigationStack.Push(new CategorySelectionPage());
+                            switch ((CurrentPage as OperationSelectionPage).ViewModel.OperationIndex)
+                            {
+                                case 0:
+                                    _navigationStack.Push(new CategorySelectionPage());
+                                    break;
+                                case 1:
+                                    _navigationStack.Push(new ExtractPage());
+                                    break;
+                                default:
+                                    throw new Exception("Operação inválida selecionada");
+                            }
                             break;
                         case CategorySelectionPage:
                             _navigationStack.Push(new BookingPage());
@@ -47,7 +58,7 @@ namespace IHC_Final.Common
                     }
                 }
 
-                return _navigationStack.Peek();
+                return CurrentPage;
             }
         }
 
@@ -58,7 +69,7 @@ namespace IHC_Final.Common
             get
             {
                 _navigationStack.Pop();
-                return _navigationStack.Peek();
+                return CurrentPage;
             }
         }
 

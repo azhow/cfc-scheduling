@@ -15,7 +15,7 @@ namespace IHC_Final.ViewModel
 
         public bool IsForwardButtonEnabled { get; private set; }
         public bool IsBackButtonEnabled { get => true; }
-        public static ObservableCollection<string> AvailableOperations { get; } = new ObservableCollection<string>()
+        public static ObservableCollection<string> AvailableOptions { get; } = new ObservableCollection<string>()
         {
             "A - Motos",
             "ACC - Ciclomotor",
@@ -24,11 +24,26 @@ namespace IHC_Final.ViewModel
             "D - Transporte de pessoas",
             "E - Caminhões pesados"
         };
+        private int _selectedIndex = -1;
+        public int SelectedIndex 
+        { 
+            get
+            {
+                return _selectedIndex;
+            }
+            set
+            {
+                if (value > -1)
+                {
+                    _selectedIndex = value;
+                    IsForwardButtonEnabled = true;
+                }
+            }
+        }
 
         public void OptionSelected(int selectedIndex)
         {
-            IsForwardButtonEnabled = selectedIndex != -1;
+            IsForwardButtonEnabled = SelectedIndex != -1;
         }
-
     }
 }

@@ -21,23 +21,18 @@ namespace IHC_Final.View
     /// </summary>
     public partial class OperationSelectionPage : Page
     {
-        public static OperationSelectionViewModel ViewModel { get; } = new OperationSelectionViewModel();
+        public OperationSelectionViewModel ViewModel { get; private set; }
 
         public OperationSelectionPage()
         {
+            ViewModel = new OperationSelectionViewModel();
             DataContext = ViewModel;
-
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(Common.NavigationStack.Instance.NextPage);
-        }
-
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ViewModel.OptionSelected((sender as ListView).SelectedIndex);
         }
     }
 }

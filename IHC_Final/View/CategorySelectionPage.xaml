@@ -30,6 +30,17 @@
         </Button>
 
         <!-- Content -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.6*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Selecione a categoria para a marcação de aulas:" FontSize="50" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ComboBox Grid.Row="1" ItemsSource="{Binding AvailableOptions, Mode=OneWay}" Text="Selecione uma categoria"
+                  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" VerticalAlignment="Top" HorizontalAlignment="Center" 
+                  FontSize="40" Width="500" IsEditable="True" IsReadOnly="True"/>
+        </Grid>
 
         <!-- Forward Button -->
         <Button Grid.Column="2" VerticalAlignment="Center" Click="ForwardButton_Click" Height="25" Width="25" IsEnabled="{Binding IsForwardButtonEnabled, Mode=OneWay}">

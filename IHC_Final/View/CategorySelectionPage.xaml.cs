@@ -21,10 +21,11 @@ namespace IHC_Final.View
     /// </summary>
     public partial class CategorySelectionPage : Page
     {
-        public static CategorySelectionViewModel ViewModel { get; } = new CategorySelectionViewModel();
+        public CategorySelectionViewModel ViewModel { get; private set; }
 
         public CategorySelectionPage()
         {
+            ViewModel = new CategorySelectionViewModel();
             DataContext = ViewModel;
             InitializeComponent();
         }
