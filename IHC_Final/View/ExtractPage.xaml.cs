@@ -1,6 +1,7 @@
 ﻿using IHC_Final.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,19 @@ namespace IHC_Final.View
     /// </summary>
     public partial class ExtractPage : Page
     {
-        public static CategorySelectionViewModel ViewModel { get; } = new CategorySelectionViewModel();
+        public bool FromSchedule { get; set; }
 
-        public ExtractPage()
+        public ObservableCollection<AvailableTimesViewModel> ScheduledTimes { get; set; } = new()
         {
-            DataContext = ViewModel;
+            new() { Time = "30/11 - 09-10h |", Teacher = "Roberto |", Car = "Uno" },
+            new() { Time = "30/11 - 10-11h |", Teacher = "Roberto |", Car = "Uno" },
+            new() { Time = "07/12 - 09-10h |", Teacher = "Roberto |", Car = "Uno" }
+        };
+
+        public ExtractPage(bool fromSchedule)
+        {
+            DataContext = this;
+            FromSchedule = fromSchedule;
             InitializeComponent();
         }
 
@@ -32,11 +41,6 @@ namespace IHC_Final.View
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(Common.NavigationStack.Instance.PreviousPage);
-        }
-
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ViewModel.OptionSelected((sender as ListView).SelectedIndex);
         }
     }
 }

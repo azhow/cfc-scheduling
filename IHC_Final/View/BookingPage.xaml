@@ -7,6 +7,72 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BookingPage">
+    <Page.Resources>
+        <DataTemplate x:Key="AvailableTimeTemplate">
+            <Grid HorizontalAlignment="Stretch" Width="180">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Time}" FontSize="15" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="{Binding Teacher}" FontSize="15" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding Car}" FontSize="15" HorizontalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="AvailableDay">
+            <Border BorderThickness="1" BorderBrush="Black">
+                <Grid Height="200" Width="200" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.2*"/>
+                        <RowDefinition Height="0.8*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="{Binding Date}" FontSize="25" HorizontalAlignment="Center"/>
+                    <ListView Grid.Row="1" ItemTemplate="{StaticResource AvailableTimeTemplate}" ItemsSource="{Binding AvailableTimes}" 
+                              SelectionMode="Multiple"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <Style x:Key="DaySelection" TargetType="ListViewItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Border x:Name="border" Background="Transparent" Margin="5">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="SelectionStates">
+                                    <VisualState x:Name="Unselected" />
+                                    <VisualState x:Name="Selected">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="border"
+                                                              Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0" Value="LightBlue" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="SelectedUnfocused">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="border"
+                                                              Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0" Value="SkyBlue" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Focusable" Value="false"/>
+        </Style>
+    </Page.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -15,7 +81,7 @@
             <ColumnDefinition Width="0.05*"/>
         </Grid.ColumnDefinitions>
         <!-- Back Button -->
-        <Button Grid.Column="0" VerticalAlignment="Center" Click="BackButton_Click" Height="25" Width="25" IsEnabled="{Binding IsBackButtonEnabled, Mode=OneWay}">
+        <Button Grid.Column="0" VerticalAlignment="Center" Click="BackButton_Click" Height="25" Width="25">
             <Image Source="/IHC_Final;component/Assets/arrow.png">
                 <Image.Style>
                     <Style TargetType="Image">
@@ -30,9 +96,71 @@
         </Button>
 
         <!-- Content -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="0.7*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Escolha os horários em que deseja marcar aula:" FontSize="30" HorizontalAlignment="Center"/>
+
+            <!-- Filters -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.7*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Filtro de professores:" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                    <ComboBox Grid.Row="1" ItemsSource="{Binding Teachers}" HorizontalAlignment="Center" VerticalAlignment="Top"
+                              FontSize="25" Width="150" Margin="20" SelectionChanged="TeacherFilter_Set" Name="TeacherFilter"/>
+                </Grid>
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.7*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Filtro de carros:" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                    <ComboBox Grid.Row="1" ItemsSource="{Binding Cars}" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                              FontSize="25" Width="150" Margin="20" SelectionChanged="CarFilter_Set" Name="CarFilter"/>
+                </Grid>
+
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.7*"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="1" Content="Limpar filtros" FontSize="20" Click="CleanFilters_Click" 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+            
+            <!-- Booking -->
+            <StackPanel Grid.Row="2" Orientation="Vertical" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <!-- First row -->
+                <ListView ItemsSource="{Binding Next5Days, Mode=OneWay}" ItemContainerStyle="{StaticResource DaySelection}"
+                      ItemTemplate="{StaticResource AvailableDay}" BorderThickness="0">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+
+                <!-- Second row -->
+                <ListView ItemsSource="{Binding NextNext5Days, Mode=OneWay}" ItemContainerStyle="{StaticResource DaySelection}"
+                      ItemTemplate="{StaticResource AvailableDay}" BorderThickness="0">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </StackPanel>
+        </Grid>
 
         <!-- Forward Button -->
-        <Button Grid.Column="2" VerticalAlignment="Center" Click="ForwardButton_Click" Height="25" Width="25" IsEnabled="{Binding IsForwardButtonEnabled, Mode=OneWay}">
+        <Button Grid.Column="2" VerticalAlignment="Center" Click="ForwardButton_Click" Height="25" Width="25">
             <Image Source="/IHC_Final;component/Assets/arrow.png" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
                     <RotateTransform Angle="180"/>
@@ -47,6 +175,6 @@
                     </Style>
                 </Image.Style>
             </Image>
-        </Button>        
+        </Button>
     </Grid>
 </Page>

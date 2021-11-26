@@ -15,8 +15,15 @@ namespace IHC_Final.View
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show("Você tem certeza?", "Abandonar operações até agora", MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
+            if (Common.NavigationStack.Instance.CurrentPage is not OperationResultPage)
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("Você tem certeza?", "Abandonar operações até agora", MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    _navigationFrame.Navigate(Common.NavigationStack.Instance.StartPage);
+                }
+            }
+            else
             {
                 _navigationFrame.Navigate(Common.NavigationStack.Instance.StartPage);
             }

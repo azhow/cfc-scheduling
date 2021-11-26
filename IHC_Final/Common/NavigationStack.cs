@@ -39,7 +39,7 @@ namespace IHC_Final.Common
                                     _navigationStack.Push(new CategorySelectionPage());
                                     break;
                                 case 1:
-                                    _navigationStack.Push(new ExtractPage());
+                                    _navigationStack.Push(new ExtractPage(false));
                                     break;
                                 default:
                                     throw new Exception("Operação inválida selecionada");
@@ -49,9 +49,11 @@ namespace IHC_Final.Common
                             _navigationStack.Push(new BookingPage());
                             break;
                         case BookingPage:
-                            _navigationStack.Push(new ExtractPage());
+                            _navigationStack.Push(new ExtractPage(true));
                             break;
                         case ExtractPage:
+                            if ((CurrentPage as ExtractPage).FromSchedule)
+                                _navigationStack.Push(new OperationResultPage());
                             break;
                         default:
                             break;

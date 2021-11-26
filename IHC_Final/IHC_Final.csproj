@@ -37,6 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="View\OperationResultPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\ExtractPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -46,6 +49,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="View\OperationResultPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="View\ExtractPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
